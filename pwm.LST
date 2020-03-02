@@ -1,0 +1,157 @@
+C51 COMPILER V9.54   PWM                                                                   08/05/2019 19:00:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE PWM
+OBJECT MODULE PLACED IN pwm.OBJ
+COMPILER INVOKED BY: C:\MDK\C51\BIN\C51.EXE pwm.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          # include "pwm.h"
+   2          #include "lcd1602.h"
+   3          #define Left_moto_go{IN1=1,IN2=0,EN1=1;} 
+   4          #define Left_moto_back{IN1=0,IN2=1,EN1=0;}
+   5          #define Left_moto_Stop{EN1=0;}
+   6          #define Right_moto_go{IN3=1,IN4=0,EN2=1;}
+   7          #define Right_moto_back{IN3=0,IN4=1,EN2=0;} 
+   8          #define Right_moto_Stop{EN2=0;}
+   9          
+  10          bit Right_moto_stop=1;
+  11          bit Left_moto_stop =1;
+  12          
+  13          uchar pwm_val_left=0;   //定义变量
+  14          uchar push_val_left=0;  //左电机占空比为N/20
+  15          uchar pwm_val_right=0;
+  16          uchar push_val_right=0; //右电机占空比为N/20
+  17          
+  18          uint time=0;
+  19          
+  20          void run(void)
+  21          { 
+  22   1                      push_val_left=15;   
+  23   1                      push_val_right=15;  
+  24   1                      Left_moto_go; 
+  25   1                      Right_moto_go; 
+  26   1      }
+  27          void run1(void)
+  28          { 
+  29   1                      push_val_left=10; 
+  30   1                      push_val_right=10; 
+  31   1                Left_moto_go; 
+  32   1                      Right_moto_go; 
+  33   1      }
+  34          
+  35          
+  36          void leftrun(void)
+  37          {
+  38   1                      push_val_left=5; 
+  39   1                      push_val_right=15; 
+  40   1                      Left_moto_back; 
+  41   1                      Right_moto_go;
+  42   1      }
+  43          void leftrun1(void)
+  44          {
+  45   1                      push_val_left=3; 
+  46   1                      push_val_right=8; 
+  47   1                      Left_moto_back; 
+  48   1                      Right_moto_go;
+  49   1      }
+  50          void rightrun(void)
+  51          {
+  52   1                      push_val_left=15; 
+  53   1                      push_val_right=5;
+  54   1                      Left_moto_go; 
+  55   1                      Right_moto_back;
+C51 COMPILER V9.54   PWM                                                                   08/05/2019 19:00:51 PAGE 2   
+
+  56   1      }
+  57          void rightrun1(void)
+  58          {
+  59   1                      push_val_left=8; 
+  60   1                      push_val_right=3;
+  61   1                      Left_moto_go; 
+  62   1                      Right_moto_back;
+  63   1      }
+  64          void stoprun(void)
+  65          {
+  66   1                      push_val_left=0; 
+  67   1                      push_val_right=0; 
+  68   1                      Left_moto_Stop; 
+  69   1                      Right_moto_Stop;
+  70   1              
+  71   1      }
+  72          void backrun(void)
+  73          {
+  74   1                      push_val_left=10; 
+  75   1                      push_val_right=10; 
+  76   1                      Left_moto_back;
+  77   1                      Right_moto_back; 
+  78   1      }
+  79          void pwm_out_left_moto(void)  //调节左电机转速  左电机输出PWM
+  80          { 
+  81   1                              if(Left_moto_stop)    //如果左电机停止
+  82   1                                {
+  83   2                                               if(pwm_val_left<=push_val_left)  
+  84   2                                                       {
+  85   3                                                         Left_moto_pwm=1;   
+  86   3                                                       }
+  87   2                                               else 
+  88   2                                                      {
+  89   3                                                               Left_moto_pwm=0; 
+  90   3                                                      }
+  91   2                                               if(pwm_val_left>=20)
+  92   2                                                      pwm_val_left=0;
+  93   2                                }
+  94   1                              else 
+  95   1                              {
+  96   2                                  Left_moto_pwm=0; 
+  97   2                              }
+  98   1      }
+  99          void pwm_out_right_moto(void)
+ 100          { 
+ 101   1                      if(Right_moto_stop)
+ 102   1                      { 
+ 103   2                        if(pwm_val_right<=push_val_right)
+ 104   2                         {
+ 105   3                           Right_moto_pwm=1; 
+ 106   3                         }
+ 107   2                        else 
+ 108   2                         {
+ 109   3                           Right_moto_pwm=0; 
+ 110   3                         }
+ 111   2                        if(pwm_val_right>=20)
+ 112   2                           pwm_val_right=0;
+ 113   2                      }
+ 114   1                      else 
+ 115   1                      {
+ 116   2                         Right_moto_pwm=0; 
+ 117   2                      }
+C51 COMPILER V9.54   PWM                                                                   08/05/2019 19:00:51 PAGE 3   
+
+ 118   1      }
+ 119          /*TIMER0中断服务函数产生PWM信号*/
+ 120          void timer0 ()interrupt 1
+ 121          {
+ 122   1                      TH0=0XEC;     //5ms定时    
+ 123   1                      TL0=0X78;  
+ 124   1                      time++;
+ 125   1                      pwm_val_left++;
+ 126   1                      pwm_val_right++;
+ 127   1                      pwm_out_left_moto();
+ 128   1                      pwm_out_right_moto();
+ 129   1      }
+ 130          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    325    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

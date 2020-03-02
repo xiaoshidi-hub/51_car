@@ -1,0 +1,139 @@
+C51 COMPILER V9.54   LCD1602                                                               08/05/2019 19:00:51 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN lcd1602.OBJ
+COMPILER INVOKED BY: C:\MDK\C51\BIN\C51.EXE lcd1602.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          # include "lcd1602.h"
+   2          
+   3          uchar code table1[]="51单片机课设";
+   4          uchar code table2[]="蓝牙寻迹遥控小车";
+   5          uchar code table3[]="作者--刘尧 ";
+   6          uchar code table4[]="林鸿洋  蒋浩婷";
+   7          
+   8          void delay_50us(uint us)
+   9          {
+  10   1          uint i,k;
+  11   1                for (i=us;i>0;i--)
+  12   1                   for (k=100;k>0;k--);
+  13   1      }
+  14          void delay(uint ms)    //蜂鸣器专用延时
+  15          {
+  16   1          uint i;
+  17   1               while(ms--)
+  18   1               {
+  19   2                   for (i=0;i<120;i++);
+  20   2           }
+  21   1       }
+  22          void write_com(uchar com)
+  23          {
+  24   1              rw=0;
+  25   1              rs=0;
+  26   1              delay_50us(1);
+  27   1              P0=com;
+  28   1              e=1 ;
+  29   1              delay_50us(10);
+  30   1              e=0;
+  31   1              delay_50us(2);
+  32   1      }
+  33          void write_data(uint dat)
+  34          {
+  35   1              rw=0;
+  36   1              rs=1;
+  37   1              delay_50us(1);
+  38   1              P0=dat;
+  39   1              e=1 ;
+  40   1              delay_50us(10);
+  41   1              e=0;
+  42   1              delay_50us(2);
+  43   1      }
+  44          
+  45          void lcd12864inti(void)
+  46          {
+  47   1              delay_50us(2000);
+  48   1              write_com(0x30);
+  49   1              delay_50us(4);
+  50   1              write_com(0x30);
+  51   1              delay_50us(4);
+  52   1              write_com(0x0f);
+  53   1              delay_50us(4);
+  54   1              write_com(0x01);
+  55   1              delay_50us(240);
+C51 COMPILER V9.54   LCD1602                                                               08/05/2019 19:00:51 PAGE 2   
+
+  56   1              write_com(0x06);
+  57   1              delay_50us(10);
+  58   1      }
+  59          void display1(void)
+  60          {
+  61   1                      uchar i;
+  62   1                      write_com(0x81);
+  63   1                      delay_50us(1);
+  64   1                      for (i=0;i<12;i++)          //一个汉字算两个字节
+  65   1                  {
+  66   2                                      write_data(table1[i]);
+  67   2                                      delay_50us(1);
+  68   2                              }
+  69   1                      }
+  70          
+  71          void display2(void )
+  72          {
+  73   1                      uchar i;
+  74   1                      write_com(0x90);
+  75   1                      delay_50us(1);
+  76   1                      for (i=0;i<16;i++)          //一个汉字算两个字节
+  77   1                  {
+  78   2                                      write_data(table2[i]);
+  79   2                                      delay_50us(1);
+  80   2                              }
+  81   1                      }
+  82          
+  83          void display3(void )
+  84          {
+  85   1                      uchar i;
+  86   1                      write_com(0x89);
+  87   1                      for(i=0;i<10;i++)          //一个汉字算两个字节
+  88   1                  {
+  89   2                              write_data(table3[i]);
+  90   2                              delay_50us(1);
+  91   2                      }
+  92   1      }
+  93          void display4(void )
+  94          {
+  95   1                      uchar i;
+  96   1                      write_com(0x99);
+  97   1                      for (i=0;i<14;i++)          //一个汉字算两个字节
+  98   1                  {
+  99   2                              write_data(table4[i]);
+ 100   2                              delay_50us(1);
+ 101   2                      }
+ 102   1      }
+ 103          void beep()
+ 104          {
+ 105   1                Beep=0;
+ 106   1            delay(80);
+ 107   1            Beep=1;
+ 108   1            delay(80);
+ 109   1      }
+ 110          
+ 111          
+ 112          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    305    ----
+   CONSTANT SIZE    =     57    ----
+C51 COMPILER V9.54   LCD1602                                                               08/05/2019 19:00:51 PAGE 3   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

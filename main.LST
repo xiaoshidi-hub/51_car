@@ -1,0 +1,145 @@
+C51 COMPILER V9.54   MAIN                                                                  08/05/2019 19:00:52 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\MDK\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          # include "reg52.h"
+   2          # include "pwm.h"
+   3          # include "xunji.h"
+   4          # include "lcd1602.h"
+   5          # include "lanya.h"
+   6          
+   7          uchar flag,i,receive;
+   8          
+   9          uchar code table5[]="GO";
+  10          uchar code table6[]="Back";
+  11          uchar code table7[]="Left";
+  12          uchar code table8[]="Right";
+  13          uchar code table9[]="Stop";
+  14          uchar code table10[]="Xunji";
+  15          
+  16          void main()
+  17          {
+  18   1          lcd12864inti();
+  19   1                Usartinit();      //µ÷ÓÃ³õÊ¼»¯º¯Êý½øÐÐ³õÊ¼»¯
+  20   1          display1();
+  21   1          display2();
+  22   1          display3(); 
+  23   1          display4(); 
+  24   1              while(1)
+  25   1              {
+  26   2            if(flag==1)     //²»¶ÏµÄ¼ì²â±êÖ¾Î»ÊÇ·ñ±»ÖÃ1  ±»ÖÃ1ËµÃ÷ÒÑ¾­Ö´ÐÐÁËÖÐ¶Ï·þÎñ³ÌÐò£¬¼´ÒÑ¾­½ÓÊý¾Ý£¬·ñÔòÒ»Ö±
+             -¼ì²âflagµÄ×´Ì¬
+  27   2                {  
+  28   3              switch(receive)
+  29   3                        { 
+  30   4                                              case 1:   
+  31   4                                                                      beep();     
+  32   4                                                                      run();  
+  33   4                                                                      ES=0;  //½ÓÏÂÀ´Òª·¢ËÍÊý¾Ý ÏÈÒªÊ¹ES=0¹Ø±Õ´®¿ÚÖÐ¶Ï µÈÊý¾Ý·¢ËÍÍêºóÔÙ´ò¿ª´®¿ÚÖÐ¶Ï
+  34   4                                                                      for(i=0;i<2;i++)
+  35   4                                                                              {
+  36   5                                                                              SBUF=table5[i];
+  37   5                                                                              while(!TI);   //µÈ´ýÊÇ·ñ·¢ËÍÍê³É    ÒòÎª·¢ËÍÍê³ÉºóTUI»áÓÐÓ²¼þÖÃ1
+  38   5                                                                              TI=0;           //Çå³ý·¢ËÍÍê³É±êÖ¾Î»  ÊÖ¶¯Çå0
+  39   5                                                                      }               
+  40   4                                                                      ES=1;                            
+  41   4                                                                      flag=0;                 
+  42   4                                                                      break;
+  43   4                                              case 2:   
+  44   4                                                                      beep();    
+  45   4                                                                      backrun(); 
+  46   4                                                                      ES=0;
+  47   4                                                                      for(i=0;i<4;i++)
+  48   4                                                                      {
+  49   5                                                                              SBUF=table6[i];
+  50   5                                                                              while(!TI);
+  51   5                                                                              TI=0;   
+  52   5                                                                      }               
+  53   4                                                                      ES=1;
+  54   4                                                                      flag=0;         
+C51 COMPILER V9.54   MAIN                                                                  08/05/2019 19:00:52 PAGE 2   
+
+  55   4                                                                      break;
+  56   4                                              case 3:  
+  57   4                                                                      beep(); 
+  58   4                                                                      leftrun();      
+  59   4                                                                      ES=0;
+  60   4                                                                      for(i=0;i<4;i++)
+  61   4                                                                              {
+  62   5                                                                              SBUF=table7[i];
+  63   5                                                                              while(!TI);
+  64   5                                                                              TI=0;   
+  65   5                                                                      }               
+  66   4                                                                      ES=1;                            
+  67   4                                                                      flag=0;                 
+  68   4                                                                      break;
+  69   4                                              case 4:  
+  70   4                                                                      beep();  
+  71   4                                                                      rightrun();
+  72   4                                                                      ES=0;
+  73   4                                                                      for(i=0;i<5;i++)
+  74   4                                                                      {
+  75   5                                                                              SBUF=table8[i];
+  76   5                                                                              while(!TI);
+  77   5                                                                              TI=0;   
+  78   5                                                                      }               
+  79   4                                                                      ES=1;
+  80   4                                                                      flag=0;         
+  81   4                                                                      break;
+  82   4                                              case 0:  
+  83   4                                                                      beep();  
+  84   4                                                                      stoprun();      
+  85   4                                                                      ES=0;
+  86   4                                                                      for(i=0;i<4;i++)
+  87   4                                                                      {
+  88   5                                                                              SBUF=table9[i];
+  89   5                                                                              while(!TI);
+  90   5                                                                              TI=0;   
+  91   5                                                                      }               
+  92   4                                                                      ES=1;                                                   
+  93   4                                                                      flag=0;
+  94   4                                                                      break;
+  95   4                                              case 5:  
+  96   4                                                          beep();
+  97   4                                                          while(1)
+  98   4                                                                      {
+  99   5                                                                         xunji();  
+ 100   5                                                                         if(receive==0)
+ 101   5                                                                              break;
+ 102   5                                                                      }
+ 103   4                }              
+ 104   3             }
+ 105   2                }
+ 106   1      }
+ 107          void Usart() interrupt 4 //Ò»µ©ÓÐÊý¾Ý½ÓÈë£¬´®ÐÐ¿ÚÖÐ¶Ï´¥·¢
+ 108          {
+ 109   1         receive=SBUF-48;     //µ±RENÎª1Ê±  ¿ªÊ¼½ÓÊÕÊý¾Ý ½«½ÓÊÕµ½µÄÖµ¸³Óèreceive   ÕâÀïµÄÊÇACSII ËùÒÔÒª¼õÈ¥48
+ 110   1         RI=0;                //µ±RI=0   ½«½ÓÊÕÊý¾Ý´æÈëSBUF¼Ä´æÆ÷ÖÐ  Çå³ý½ÓÊÕÖÐ¶Ï±êÖ¾Î»  ÓÐÄÚ²¿Ó²¼þÖÃ1£¬ÏîCPU·¢³
+             -öÖÐ¶ÏÇëÇó ÔÚÖÐ¶Ï·þÎñ³ÌÐòÖÐ£¬±ØÐëÓÃÈí¼þ½«ÆäÇåÁã£¬ È¡Ïû´ËÖÐ¶ÏÉêÇë 
+ 111   1         flag=1;                          //½«±êÖ¾Î»ÖÃ1  Õâ¸öÊÇ·½±ãÔÚÖ÷³ÌÐòÖÐ²éÑ¯ÅÐ¶ÏÊÇ·ñÒÑ¾­½ÓÊÕµ½Êý¾Ý
+ 112   1      }
+ 113          
+ 114          
+ 115          
+C51 COMPILER V9.54   MAIN                                                                  08/05/2019 19:00:52 PAGE 3   
+
+ 116          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    335    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =      3    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

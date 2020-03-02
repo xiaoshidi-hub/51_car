@@ -1,0 +1,6 @@
+"lanya.obj",
+"pwm.obj",
+"lcd1602.obj",
+"xunji.obj",
+"main.obj" 
+TO "lanya" 
